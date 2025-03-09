@@ -21,7 +21,14 @@
     <div class="container">
        
     
-       
+      
+
+        
+        
+        <form action="{{ route('students.index') }}" method="GET" class="mb-2">
+            <button class="btn btn-secondary" type="submit">Clear Search</button>
+        </form>
+        
            
     <div style="border: 1px solid #ebe9e9; border-radius: 8px; background-color:#fffcfc;; padding: 10px;">
         <div>
@@ -100,6 +107,10 @@
         </table>
     </div>   
 
+         <!-- Add Pagination Links Below the Table -->
+         <div class="d-flex justify-content-end">
+            {{ $students->appends(['search' => request('search')])->links('pagination::bootstrap-5') }}
+        </div>
 
     </div>     
                     <!-- Modal component -->
