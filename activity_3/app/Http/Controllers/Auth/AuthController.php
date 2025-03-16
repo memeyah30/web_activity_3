@@ -15,7 +15,7 @@ class AuthController extends Controller
         if (Session::has('loginId')) {
             return redirect()->route('std.myView');
         }
-        return view('auth.login');
+        return view('login');
     }
 
     public function login(Request $request)
@@ -36,31 +36,9 @@ class AuthController extends Controller
         }
     }
 
-    // Register
-    public function indexRegister()
-    {
-        if (Session::has('loginId')) {
-            return redirect()->route('std.myView');
-        }
-        return view('auth.register');
-    }
+   
 
-    public function userRegister(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-
-        $input['name'] = $request->name;
-        $input['email'] = $request->email;
-        $input['password'] = bcrypt($request->password);
-        User::create($input);
-
-        return redirect()->route('auth.index')->with('success', 'Registration successful, please login');
-    }
-
+     
     // Logout
     public function logout()
     {
