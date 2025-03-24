@@ -11,7 +11,7 @@ Route::get('/', function () {
 
 // Auth
 Route::get('/login', [AuthController::class, 'index'])->name('auth.index');
-Route::post('/login', [AuthController::class, 'login'])->name('login'); // Fix here
+Route::post('/user-login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware([AuthCheck::class])->group(function () {
     // View
@@ -25,5 +25,5 @@ Route::middleware([AuthCheck::class])->group(function () {
     Route::get('/delete', [StudentsController::class, 'deleteME'])->name('std.studentDelete');
 
     // Logout
-    Route::get('/logout', [AuthController::class, 'logout'])->name('.logout');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });

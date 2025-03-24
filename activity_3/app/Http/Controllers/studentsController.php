@@ -8,27 +8,16 @@ use Illuminate\Http\Request;
 
 class StudentsController extends Controller
 {
-
+    // READ
     public function myView()
     {
-        
-      
-       $students = Students::paginate(5);
+        $students = Students::all();
         $users = User::all();
 
-        return view('dashboard', compact('students', 'users'));
+        return view('welcome', compact('students', 'users'));
     }
 
-   
-    public function search(Request $request)
-    {
-        $search = $request->input('search'); 
-
-       $students = Students::where('name', 'like', "%{$search}%")->paginate(5)->appends(['search' => $search]); 
-        return view('dashboard', compact('students'));
-    }
-
-
+    // CREATE
     public function addNewStudent(Request $request)
     {
         $request->validate([
@@ -37,7 +26,6 @@ class StudentsController extends Controller
             'gender' => 'required',
         ]);
 
-        //students
         $add_new = new Students;
         $add_new->id = $request->id;
         $add_new->name = $request->name;
@@ -45,57 +33,33 @@ class StudentsController extends Controller
         $add_new->gender = $request->gender;
         $add_new->save();
 
+
+
         return back()->with('success', 'Student added successfully');
     }
 
-    public function index(Request $request)
+    // UPDATE
+    public function updateView($id)
     {
-       $students = Students::paginate(5);  
-       $totalStudents = Students::count();
-       return view('dashboard', compact('students')); 
+        $students = Students::where('id', '=', $id)->get();
+        return view('update', compact('students'));
     }
 
 
-
-    public function edit($id)
+    public function updateME(Request $request)
     {
-        $student = Students::find($id);
-        return view('students.edit', compact('student'));
+        Students::where('id', '=', $request->id)->update([
+            'name' => $request->name,
+            'age' => $request->age,
+            'gender' => $request->gender,
+        ]);
+
+        return redirect('/')->with('success', 'Student updated successfully');
     }
 
-            public function update(Request $request, $id)
-        {
-           
-            $request->validate([
-                'name' => 'required',
-                'age' => 'required',
-                'gender' => 'required',
-            ]);
-
-           
-            $student = Students::find($id);
-
-            
-            $student->update([
-                'name' => $request->name,
-                'age' => $request->age,
-                'gender' => $request->gender,
-            ]);
-
-            return redirect()->route('students.index')->with('success', 'Student updated successfully!');
-        }
-
-           
-
-    //to delete 
-    public function destroy($id)
+    public function deleteME($id)
     {
-        $student = Students::findOrFail($id);
-        $student->delete();
-
-        return redirect('/')->with('success', 'Student deleted successfully.');
-    
+        Students::where('id', '=', $id)->delete();
+        return back()->with('success', 'Student deleted successfully');
     }
-
-
 }

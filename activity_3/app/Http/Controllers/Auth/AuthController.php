@@ -3,50 +3,33 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    // Login
+    // Show Login Page
     public function index()
     {
-        if (Session::has('loginId')) {
-            return redirect()->route('std.myView');
-        }
         return view('login');
     }
 
+    // Handle Login
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $credentials = $request->only('email', 'password');
 
-        $loginAuth = User::where('email', '=', $request->email)
-            ->first();
-
-        if ($loginAuth) {
-            Session::put('loginId', $loginAuth->id);
-            return redirect()->route('std.myView')->with('success', 'Login successfully');
-        } else {
-            return back()->with('error', 'Invalid email or password');
+        if (Auth::attempt($credentials)) {
+            return redirect()->route('std.myView');
         }
+
+        return back()->withErrors(['error' => 'Invalid email or password']);
     }
 
-   
-
-     
-    // Logout
+    // Handle Logout
     public function logout()
     {
-        if (Session::has('loginId')) {
-            Session::pull('loginId');
-            return redirect()->route('auth.index')->with('success', 'Logout successfully');
-        } else {
-            return redirect()->route('auth.index')->with('error', 'You are not logged in');
-        }
+        Auth::logout();
+        return redirect('/login');
     }
 }
