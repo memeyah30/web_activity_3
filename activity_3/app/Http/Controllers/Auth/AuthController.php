@@ -16,15 +16,16 @@ class AuthController extends Controller
 
     // Handle Login
     public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
+{
+    $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-            return redirect()->route('std.myView');
-        }
-
-        return back()->withErrors(['error' => 'Invalid email or password']);
+    if (Auth::attempt($credentials)) {
+        return redirect()->route('std.myView'); // Redirect to students view
     }
+
+    return back()->withErrors(['error' => 'Invalid email or password']);
+}
+
 
     // Handle Logout
     public function logout()

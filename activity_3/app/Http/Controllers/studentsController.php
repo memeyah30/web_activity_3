@@ -48,13 +48,19 @@ class StudentsController extends Controller
 
     public function updateME(Request $request)
     {
-        Students::where('id', '=', $request->id)->update([
+        $student = Students::find($request->id);
+        
+        if (!$student) {
+            return redirect()->route('std.myView')->with('error', 'Student not found.');
+        }
+    
+        $student->update([
             'name' => $request->name,
             'age' => $request->age,
-            'gender' => $request->gender,
+            'gender' => $request->gender
         ]);
-
-        return redirect('/')->with('success', 'Student updated successfully');
+    
+        return redirect()->route('std.myView')->with('success', 'Student updated successfully.');
     }
 
     public function deleteME($id)

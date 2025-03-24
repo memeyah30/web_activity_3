@@ -1,37 +1,49 @@
-<!-- resources/views/home.blade.php -->
+@extends('base')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
-    <!-- Include Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <!--user icon-->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+@section('title', 'Update Student')
 
+@section('content')
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg p-4">
+                <h4 class="text-center"><strong>Update Student</strong></h4>
+                <hr>
 
-</head>
-<body>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-12 d-flex justify-content-end mt-3">
-                <form action="/logout" method="POST">
+                @foreach($students as $std)
+                <form method="post" action="{{ route('std.studentUpdate') }}">
                     @csrf
-                    <!-- Check if the user is authenticated -->
-                    @auth
-                    <i class="fas fa-user"></i>&nbsp;{{ auth()->user()->username }}&nbsp;&nbsp;
-                   @endauth
-                    <button class="btn btn-danger">Log Out</button> 
+
+                    <input type="hidden" name="id" value="{{ $std->id }}">
+
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" name="name" value="{{ $std->name }}" placeholder="Enter name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Age</label>
+                        <input type="number" class="form-control" name="age" value="{{ $std->age }}" placeholder="Enter age">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Gender</label>
+                        <select class="form-control" name="gender">
+                            <option value="Male" {{ $std->gender == 'Male' ? 'selected' : '' }}>Male</option>
+                            <option value="Female" {{ $std->gender == 'Female' ? 'selected' : '' }}>Female</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Update</button>
                 </form>
+                @endforeach
+
+                <hr>
+                <div class="text-center">
+                    <a class="btn btn-secondary" href="{{ route('std.myView') }}">Back to Home</a>
+                </div>
             </div>
         </div>
-        <br>
-
-    
-
-</body>
-</html>
+    </div>
+</div>
+@endsection

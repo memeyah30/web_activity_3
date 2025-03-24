@@ -1,51 +1,40 @@
 @extends('base')
+
 @section('title', 'Login')
 
-<div class="centered-div">
-    <div class="container">
-        <div class="col" style="width: 80vh;">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 style="float: left;"><strong>Login</strong></h4>
-                    </div>
+@section('content')
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4" style="width: 350px;">
+        <h4 class="text-center"><strong>Login</strong></h4>
+        <hr>
 
-                    @if(Session("success"))
-                    <span class="alert alert-success">
-                        {{ session('success') }}
-                    </span>
-                    @endif
+        @if(Session::has('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        @if(Session::has('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
 
-                    @if(Session("error"))
-                    <span class="alert alert-danger">
-                        {{ session('error') }}
-                    </span>
-                    @endif
-
-                    <div class="card-body">
-                        <form method="post" action="{{ route('auth.login')}}">
-                            @csrf
-                            <div class="mb-3">
-                                <label class="form-label">Email Address</label>
-                                <input type="text" class="form-control" id="email" name="email" value="{{ old('email') }}" placeholder="Enter email">
-                                @error('email')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Password</label>
-                                <input type="text" class="form-control" id="password" name="password" value="{{ old('password') }}" placeholder="Enter password">
-                                @error('password')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <button type="submit" class="btn btn-primary">Login</button>
-                        </form>
-
-                        <a href="{{ route('auth.register') }}">Register</a>
-                    </div>
-                </div>
+        <form method="post" action="{{ route('login') }}">
+            @csrf
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="Enter email">
+                @error('email')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
-        </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" placeholder="Enter password">
+                @error('password')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
     </div>
 </div>
+@endsection
